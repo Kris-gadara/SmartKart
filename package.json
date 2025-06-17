@@ -1,0 +1,14 @@
+{
+  "name": "smartkart",
+  "version": "1.0.0",
+  "description": "SmartKart E-commerce Application",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd smartkart/backend && set MONGODB_URI=mongodb://localhost:27017/smartkart && set JWT_SECRET=a4899d01bd9367ace3a0399332ad5e877412c7d111720f83eab97cfad4290d01879c9271457fbcaa413d9ac00b3cbec8e016f3d0e && set PORT=5000 && npm start",
+    "frontend": "cd smartkart/frontend && npm start",
+    "install-all": "npm install && cd smartkart/backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

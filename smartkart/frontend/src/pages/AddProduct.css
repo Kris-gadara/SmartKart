@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #4f46e5; /* Indigo */
+  --primary-dark: #3730a3;
+  --accent-color: #f59e0b; /* Amber */
+  --success-color: #10b981; /* Emerald */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-400: #9ca3af;
+  --gray-600: #4b5563;
+  --gray-900: #111827;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.add-product-container {
+  @apply max-w-lg mx-auto my-16 p-8 bg-white rounded-2xl shadow-lg border border-gray-100;
+}
+
+.add-product-container h2 {
+  @apply text-2xl md:text-3xl font-bold text-gray-900 text-center mb-8;
+}
+
+.add-product-form .form-group {
+  @apply mb-6;
+}
+
+.add-product-form label {
+  @apply block mb-2 text-sm font-semibold text-gray-700;
+}
+
+.add-product-form input[type="text"],
+.add-product-form input[type="number"],
+.add-product-form textarea {
+  @apply w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200;
+}
+
+.add-product-form textarea {
+  @apply resize-y min-h-[120px];
+}
+
+.add-product-form input[type="file"] {
+  @apply py-3 text-gray-600;
+}
+
+.add-product-btn {
+  @apply block w-full py-3 px-6 bg-gradient-to-r from-amber-400 to-emerald-400 text-white rounded-lg font-semibold text-lg hover:transform hover:-translate-y-1 transition-all duration-300 shadow-md;
+}
+
+.message {
+  @apply mt-6 p-4 rounded-lg text-center font-medium text-gray-700 bg-gray-100 border border-gray-200;
+}
+
+.back-btn {
+  @apply block w-full py-3 px-6 bg-gray-600 text-white rounded-lg font-semibold text-base hover:bg-gray-700 transition-all duration-300 mt-4;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .add-product-container {
+    @apply mx-4 p-6;
+  }
+
+  .add-product-container h2 {
+    @apply text-xl;
+  }
+
+  .add-product-form input[type="text"],
+  .add-product-form input[type="number"],
+  .add-product-form textarea {
+    @apply text-sm py-2;
+  }
+
+  .add-product-btn,
+  .back-btn {
+    @apply py-2 text-base;
+  }
+}
