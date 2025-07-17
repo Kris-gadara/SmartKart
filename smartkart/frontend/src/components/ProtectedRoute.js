@@ -19,9 +19,24 @@ export const CustomerProtectedRoute = ({ children }) => {
     return <Navigate to="/customer/login" state={{ from: location.pathname }} replace />;
   }
 
+  // Check token format
   const tokenParts = token.split('.');
   if (tokenParts.length !== 3) {
     console.log('Invalid token format, redirecting to customer login');
+    localStorage.removeItem('token');
+    return <Navigate to="/customer/login" state={{ from: location.pathname }} replace />;
+  }
+  
+  // Check token expiration
+  try {
+    const payload = JSON.parse(atob(tokenParts[1]));
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      console.log('Token expired, redirecting to customer login');
+      localStorage.removeItem('token');
+      return <Navigate to="/customer/login" state={{ from: location.pathname }} replace />;
+    }
+  } catch (error) {
+    console.error('Error parsing token:', error);
     localStorage.removeItem('token');
     return <Navigate to="/customer/login" state={{ from: location.pathname }} replace />;
   }
@@ -47,12 +62,27 @@ export const AdminProtectedRoute = ({ children }) => {
     return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
   }
 
+  // Check token format
   const tokenParts = token.split('.');
   if (tokenParts.length !== 3) {
     console.log('Invalid admin token format, redirecting to admin login');
     localStorage.removeItem('adminToken');
     return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
   }
+  
+  // Check token expiration
+  try {
+    const payload = JSON.parse(atob(tokenParts[1]));
+    if (payload.exp && payload.exp * 1000 < Date.now()) {
+      console.log('Admin token expired, redirecting to admin login');
+      localStorage.removeItem('adminToken');
+      return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
+    }
+  } catch (error) {
+    console.error('Error parsing admin token:', error);
+    localStorage.removeItem('adminToken');
+    return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
+  }
 
   return children;
-}; 
+};

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './AdminDashboard.css';
 
 function AdminDashboard() {
   const [orders, setOrders] = useState([]);
@@ -19,7 +17,7 @@ function AdminDashboard() {
           return;
         }
 
-        const response = await fetch('http://localhost:5000/api/orders', { 
+        const response = await fetch('http://localhost:5000/api/orders', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -31,16 +29,14 @@ function AdminDashboard() {
         }
 
         const data = await response.json();
-       
-        if (data && Array.isArray(data.orders)) {
-             setOrders(data.orders);
-        } else if (Array.isArray(data)){
-             setOrders(data)
-        }
-        else {
-             throw new Error('Unexpected data format from backend');
-        }
 
+        if (data && Array.isArray(data.orders)) {
+          setOrders(data.orders);
+        } else if (Array.isArray(data)) {
+          setOrders(data);
+        } else {
+          throw new Error('Unexpected data format from backend');
+        }
       } catch (err) {
         console.error('Error fetching orders:', err);
         setError(err.message);
@@ -50,26 +46,22 @@ function AdminDashboard() {
     };
 
     fetchOrders();
-  }, []); 
+  }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
+    const previousStatus = orders.find(order => order._id === orderId)?.status;
 
-    setOrders(prevOrders =>
-      prevOrders.map(order =>
+    setOrders(prev =>
+      prev.map(order =>
         order._id === orderId ? { ...order, status: newStatus } : order
       )
     );
 
     try {
       const token = localStorage.getItem('adminToken');
-      if (!token) {
-        console.error('Admin not authenticated.');
-        alert('Admin not authenticated. Please log in again.');
+      if (!token) throw new Error('Admin not authenticated');
 
-        return;
-      }
-
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, { 
+      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -82,89 +74,160 @@ function AdminDashboard() {
         const errorData = await response.json().catch(() => ({ message: 'Failed to update order status' }));
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
-
-      console.log(`Order ${orderId} status updated to ${newStatus} successfully.`);
-
     } catch (err) {
       console.error('Error updating order status:', err);
-      alert(`Error updating order status: ${err.message}`);
-     
-      setOrders(prevOrders =>
-        prevOrders.map(order =>
-          order._id === orderId ? { ...order, status: order.status } : order 
+      alert(`Error: ${err.message}`);
+
+      setOrders(prev =>
+        prev.map(order =>
+          order._id === orderId ? { ...order, status: previousStatus } : order
         )
-      ); 
+      );
     }
   };
 
   if (loading) {
-    return <div className="loading">Loading orders...</div>;
+    return (
+      <div style={styles.wrapper}>
+        <div style={styles.card}><p style={styles.message}>Loading orders...</p></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return (
+      <div style={styles.wrapper}>
+        <div style={{ ...styles.card, border: '1px solid #fecaca', backgroundColor: '#fef2f2' }}>
+          <p style={{ ...styles.message, color: '#e11d48' }}>Error: {error}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="admin-dashboard-container">
-      <h2>Admin Dashboard</h2>
-
-      {/* Admin Navigation */}
-      <div className="admin-nav">
-        <Link to="/admin/products">Manage Products</Link>
-        <Link to="/admin/products/add">Add New Product</Link>
-        <Link to="/admin/dashboard">View Orders</Link>
-      </div>
-
-      <div className="orders-list">
-        <h3>All Orders</h3>
-        {orders.length === 0 ? (
-          <p>No orders found.</p>
-        ) : (
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer Email</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Items</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map(order => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.customer?.email || order.customer}</td>
-                  <td>₹{order.totalAmount.toFixed(2)}</td>
-                  <td>
-                    <select 
-                      className="status-select"
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                    >
-                      {orderStatuses.map(status => (
-                          <option key={status} value={status}>{status}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <ul>
-                      {order.items.map((item, itemIndex) => (
-                        <li key={item._id || itemIndex}> 
-                           {item.name} (Qty: {item.quantity}) - ₹{(item.price * item.quantity).toFixed(2)}
-                        </li>
-                      ))}
-                    </ul>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+    <div style={styles.wrapper}>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Admin Dashboard</h2>
+        <div style={styles.section}>
+          <h3 style={styles.subheading}>All Orders</h3>
+          {orders.length === 0 ? (
+            <p>No orders found.</p>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th style={styles.th}>Order ID</th>
+                    <th style={styles.th}>Customer Email</th>
+                    <th style={styles.th}>Total</th>
+                    <th style={styles.th}>Status</th>
+                    <th style={styles.th}>Items</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map(order => (
+                    <tr key={order._id}>
+                      <td style={styles.td}>{order._id}</td>
+                      <td style={styles.td}>{order.customer?.email || order.customer}</td>
+                      <td style={styles.td}>₹{order.totalAmount.toFixed(2)}</td>
+                      <td style={styles.td}>
+                        <select
+                          value={order.status}
+                          onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                          style={styles.select}
+                        >
+                          {orderStatuses.map(status => (
+                            <option key={status} value={status}>{status}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td style={styles.td}>
+                        <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                          {order.items.map((item, i) => (
+                            <li key={i}>{item.name} (Qty: {item.quantity}) – ₹{(item.price * item.quantity).toFixed(2)}</li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-export default AdminDashboard; 
+const styles = {
+  wrapper: {
+    minHeight: '100vh',
+    backgroundColor: '#f9fafb',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '2rem',
+  },
+  card: {
+    width: '100%',
+    maxWidth: '1100px',
+    backgroundColor: '#ffffff',
+    padding: '2rem',
+    borderRadius: '12px',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: '1.75rem',
+    fontWeight: '700',
+    color: '#1f2937',
+    marginBottom: '1.5rem',
+  },
+  section: {
+    marginTop: '1rem',
+  },
+  subheading: {
+    fontSize: '1.2rem',
+    fontWeight: '600',
+    color: '#374151',
+    marginBottom: '1rem',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
+    overflow: 'hidden',
+  },
+  th: {
+    textAlign: 'left',
+    padding: '0.75rem',
+    backgroundColor: '#f3f4f6',
+    color: '#111827',
+    fontSize: '0.875rem',
+    fontWeight: '600',
+    borderBottom: '1px solid #e5e7eb',
+  },
+  td: {
+    padding: '0.75rem',
+    fontSize: '0.875rem',
+    borderBottom: '1px solid #e5e7eb',
+    color: '#374151',
+  },
+  select: {
+    padding: '0.4rem 0.5rem',
+    fontSize: '0.85rem',
+    border: '1px solid #d1d5db',
+    borderRadius: '6px',
+    color: '#374151',
+    backgroundColor: '#fff',
+  },
+  message: {
+    fontSize: '1rem',
+    color: '#4b5563',
+    textAlign: 'center',
+  },
+};
+
+export default AdminDashboard;

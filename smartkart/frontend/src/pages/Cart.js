@@ -26,51 +26,41 @@ function Cart() {
       <div className="cart-items">
         {cartItems.map((item) => (
           <div key={item._id} className="cart-item">
-            <img src={`http://localhost:5000${item.image}`} alt={item.name} className="cart-item-image" />
+            <div className="cart-image-wrapper">
+              <img
+                src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                alt={item.name}
+                className="cart-item-image"
+              />
+            </div>
             <div className="cart-item-details">
               <h3>{item.name}</h3>
               <p className="cart-item-price">${item.price}</p>
               <div className="quantity-controls">
-                <button 
-                  onClick={() => updateQuantity(item._id, item.quantity - 1)}
-                  className="quantity-btn"
-                >
-                  -
-                </button>
+                <button onClick={() => updateQuantity(item._id, item.quantity - 1)} className="quantity-btn">-</button>
                 <span className="quantity">{item.quantity}</span>
-                <button 
-                  onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                  className="quantity-btn"
-                >
-                  +
-                </button>
+                <button onClick={() => updateQuantity(item._id, item.quantity + 1)} className="quantity-btn">+</button>
               </div>
             </div>
-            <button 
-              onClick={() => removeFromCart(item._id)}
-              className="remove-item-btn"
-            >
+            <button onClick={() => removeFromCart(item._id)} className="remove-item-btn">
               Remove
             </button>
           </div>
         ))}
       </div>
+
       <div className="cart-summary">
         <div className="cart-total">
           <span>Total:</span>
           <span>${getCartTotal().toFixed(2)}</span>
         </div>
         <div className="cart-actions">
-          <Link to="/dashboard" className="continue-shopping-btn">
-            Continue Shopping
-          </Link>
-          <Link to="/checkout" className="checkout-btn">
-            Proceed to Checkout
-          </Link>
+          <Link to="/dashboard" className="continue-shopping-btn">Continue Shopping</Link>
+          <Link to="/checkout" className="checkout-btn">Proceed to Checkout</Link>
         </div>
       </div>
     </div>
   );
 }
 
-export default Cart; 
+export default Cart;

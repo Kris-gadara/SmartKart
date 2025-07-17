@@ -8,8 +8,6 @@ function Checkout() {
   const navigate = useNavigate();
 
   const handlePlaceOrder = async () => {
-   
-
     const orderData = {
       items: cartItems.map(item => ({
         product: item._id,
@@ -19,24 +17,21 @@ function Checkout() {
         total: item.price * item.quantity
       })),
       totalAmount: getCartTotal(),
-
     };
 
-    console.log('Attempting to place order with data:', orderData);
-
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     if (!token) {
       alert('You need to be logged in to place an order.');
-      navigate('/login'); 
+      navigate('/login');
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/orders', { 
+      const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(orderData),
       });
@@ -47,52 +42,52 @@ function Checkout() {
       }
 
       const result = await response.json();
-      console.log('Order placed successfully:', result);
-
       clearCart();
-
-      alert('Order placed successfully!'); 
-      navigate('/dashboard'); 
+      alert('Order placed successfully!');
+      navigate('/dashboard');
 
     } catch (error) {
       console.error('Error placing order:', error);
-      alert(`Error placing order: ${error.message}`); 
+      alert(`Error placing order: ${error.message}`);
     }
   };
 
   if (cartItems.length === 0) {
     return (
       <div className="checkout-container">
-        <h2>Checkout</h2>
-        <p>Your cart is empty. Please add items before checking out.</p>
-   
+        <div className="checkout-card">
+          <h2>Checkout</h2>
+          <p>Your cart is empty. Please add items before checking out.</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="checkout-container">
-      <h2>Checkout Summary</h2>
+      <div className="checkout-card">
+        <h2>Checkout Summary</h2>
 
-      <div className="order-summary">
-        <h3>Items in your cart:</h3>
-        <ul>
-          {cartItems.map(item => (
-            <li key={item._id}>
-              {item.name} (Quantity: {item.quantity}) - ₹{(item.price * item.quantity).toFixed(2)}
-            </li>
-          ))}
-        </ul>
-        <div className="order-total">
-          <strong>Total:</strong> ₹{getCartTotal().toFixed(2)}
+        <div className="order-summary">
+          <h3>Items in your cart:</h3>
+          <ul>
+            {cartItems.map(item => (
+              <li key={item._id}>
+                {item.name} (Qty: {item.quantity}) - ₹{(item.price * item.quantity).toFixed(2)}
+              </li>
+            ))}
+          </ul>
+          <div className="order-total">
+            <strong>Total:</strong> ₹{getCartTotal().toFixed(2)}
+          </div>
         </div>
-      </div>
 
-      <button className="place-order-btn" onClick={handlePlaceOrder}>
-        Place Order
-      </button>
+        <button className="place-order-btn" onClick={handlePlaceOrder}>
+          Place Order
+        </button>
+      </div>
     </div>
   );
 }
 
-export default Checkout; 
+export default Checkout;

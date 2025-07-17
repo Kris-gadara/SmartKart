@@ -1,13 +1,22 @@
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import AdminNavbar from './AdminNavbar';
 import './Layout.css';
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 function Layout({ children }) {
   const location = useLocation();
-  const hideNavbar = location.pathname === '/register' || location.pathname === '/admin/login' || location.pathname === '/login' || location.pathname === '/cart';
-  const showAdminNavbar = location.pathname.startsWith('/admin/') && location.pathname !== '/admin/login';
+
+  const hideNavbar =
+    location.pathname === '/register' ||
+    location.pathname === '/admin/login' ||
+    location.pathname === '/login' ||
+    location.pathname === '/cart';
+
+  const showAdminNavbar =
+    location.pathname.startsWith('/admin/') &&
+    location.pathname !== '/admin/login';
+
   const noScroll = location.pathname === '/register';
 
   useEffect(() => {
@@ -20,7 +29,7 @@ function Layout({ children }) {
     return () => {
       document.body.classList.remove('no-scroll-body');
     };
-  }, [noScroll]); 
+  }, [noScroll]);
 
   return (
     <div className="layout">
@@ -33,4 +42,4 @@ function Layout({ children }) {
   );
 }
 
-export default Layout; 
+export default Layout;

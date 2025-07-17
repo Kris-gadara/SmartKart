@@ -120,11 +120,18 @@ function ManageProducts() {
               <tr key={product._id}>
                 <td>
                   <img
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                    src={
+                      product.image?.startsWith('http')
+                        ? product.image
+                        : `http://localhost:5000/${
+                            product.image.startsWith('uploads') ? product.image : 'uploads/' + product.image
+                          }`
+                    }
                     alt={product.name}
                     className="product-thumbnail"
                     onError={(e) => {
-                      e.target.src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop';
+                      e.target.src =
+                        'https://via.placeholder.com/60?text=No+Image';
                     }}
                   />
                 </td>
@@ -154,4 +161,4 @@ function ManageProducts() {
   );
 }
 
-export default ManageProducts; 
+export default ManageProducts;

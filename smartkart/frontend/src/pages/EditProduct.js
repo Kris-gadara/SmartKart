@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import './EditProduct.css'; 
+import './EditProduct.css';
 
 function EditProduct() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState(null); 
-  const [existingImage, setExistingImage] = useState(''); 
+  const [imageFile, setImageFile] = useState(null);
+  const [existingImage, setExistingImage] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -44,7 +45,6 @@ function EditProduct() {
         setDescription(productData.description);
         setPrice(productData.price.toString());
         setExistingImage(productData.image);
-
       } catch (err) {
         console.error('Error fetching product:', err);
         setError(err.message);
@@ -108,7 +108,7 @@ function EditProduct() {
   };
 
   const handleBackToManageProducts = () => {
-    navigate('/admin/products'); 
+    navigate('/admin/products');
   };
 
   if (loading) {
@@ -120,7 +120,7 @@ function EditProduct() {
   }
 
   if (!product) {
-      return <div className="loading">Product not found or data unavailable.</div>;
+    return <div className="loading">Product not found or data unavailable.</div>;
   }
 
   return (
@@ -129,56 +129,55 @@ function EditProduct() {
       <form className="edit-product-form" onSubmit={handleUpdateProduct}>
         <div className="form-group">
           <label htmlFor="productName">Product Name</label>
-          <input 
-            type="text" 
-            id="productName" 
-            value={productName} 
-            onChange={(e) => setProductName(e.target.value)} 
-            required 
+          <input
+            type="text"
+            id="productName"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            required
           />
         </div>
         <div className="form-group">
           <label htmlFor="description">Description</label>
-          <textarea 
-            id="description" 
-            value={description} 
-            onChange={(e) => setDescription(e.target.value)} 
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </div>
         <div className="form-group">
           <label htmlFor="price">Price (₹)</label>
-          <input 
-            type="number" 
-            id="price" 
+          <input
+            type="number"
+            id="price"
             value={price}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === '' || (!isNaN(value) && parseFloat(value) >= 0)) {
-                setPrice(value);
-              }
-            }}
-            required  
+            onChange={(e) => setPrice(e.target.value)}
+            required
             placeholder="Enter price"
           />
         </div>
         <div className="form-group">
           <label>Current Image:</label>
           {existingImage && (
-            <img src={`http://localhost:5000${existingImage}`} alt="Current Product Image" className="current-product-image-thumbnail" />
+            <img
+              src={`http://localhost:5000${existingImage}`}
+              alt="Current Product"
+              className="current-product-image-thumbnail"
+            />
           )}
         </div>
-         <div className="form-group">
+        <div className="form-group">
           <label htmlFor="image">Upload New Image (Optional)</label>
-          <input 
-            type="file" 
-            id="image" 
-            onChange={(e) => setImageFile(e.target.files[0])} 
+          <input
+            type="file"
+            id="image"
+            onChange={(e) => setImageFile(e.target.files[0])}
           />
         </div>
-        
+
         <button type="submit" className="update-product-btn">Update Product</button>
       </form>
-      
+
       {message && <div className="message">{message}</div>}
 
       <button onClick={handleBackToManageProducts} className="back-btn">Back to Manage Products</button>
@@ -186,4 +185,4 @@ function EditProduct() {
   );
 }
 
-export default EditProduct; 
+export default EditProduct;

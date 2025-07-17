@@ -52,22 +52,27 @@ A full-stack e-commerce application built with React.js, Node.js, Express.js, an
 
 2. **Install dependencies**
    ```bash
-   npm install
-   cd smartkart/backend && npm install
-   cd ../frontend && npm install
+   npm run install-all
    ```
 
 3. **Environment Setup**
    
-   Create a `.env` file in the `smartkart/backend` directory:
+   The `.env` file in the `smartkart/backend` directory should contain:
    ```env
    MONGODB_URI=mongodb://localhost:27017/smartkart
    JWT_SECRET=your_jwt_secret_key_here
    PORT=5000
    ```
 
-4. **Start the application**
+4. **Seed the database**
    ```bash
+   cd smartkart/backend
+   npm run seed
+   ```
+
+5. **Start the application**
+   ```bash
+   cd ../..
    npm run dev
    ```
 
@@ -176,4 +181,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**SmartKart** - Your premium destination for cutting-edge electronics and smart devices. 🛒✨ 
+**SmartKart** - Your premium destination for cutting-edge electronics and smart devices. 🛒✨

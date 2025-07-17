@@ -11,12 +11,9 @@ export const registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: "User already exists." });
         }
 
-        let finalPassword = password;
-
-        if (role === "customer") {
-            const saltRounds = 10;
-            finalPassword = await bcrypt.hash(password, saltRounds);
-        }
+        // Hash password for all users (both customers and admins)
+        const saltRounds = 10;
+        const finalPassword = await bcrypt.hash(password, saltRounds);
 
         const user = await User.create({ name, email, phone, password: finalPassword, role });
 
@@ -44,14 +41,8 @@ export const loginUser = async (req, res) => {
             });
         }
 
-        let isMatch = false;
-
-        if (user.role === "customer") {
-            isMatch = await bcrypt.compare(password, user.password);
-        } 
-        else if (user.role === "admin") {
-            isMatch = password === user.password;
-        }
+        // Use bcrypt to compare passwords for all users
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(401).json({ success: false, message: "Invalid email or password." });

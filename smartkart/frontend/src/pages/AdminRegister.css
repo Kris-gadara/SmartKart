@@ -1,14 +1,13 @@
-/* Container */
-.admin-login-container {
+.admin-register-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-  padding: 2rem;
+  background: linear-gradient(to bottom right, #e0e7ff, #f0f4ff);
   font-family: 'Poppins', sans-serif;
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
 }
 
 /* SVG background */
@@ -21,58 +20,56 @@
   height: auto;
 }
 
-/* Form */
-.admin-login-form {
-  background: rgba(255, 255, 255, 0.7);
+/* Form box */
+.admin-register-form {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.75);
   /* backdrop-filter: blur(20px); */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   padding: 2rem 2.5rem;
   border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  max-width: 420px;
   width: 100%;
-  max-width: 400px;
-  z-index: 1;
-  position: relative;
   animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Form title */
+/* Title */
 .form-title {
+  text-align: center;
   font-size: 1.75rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
   color: #1e293b;
-  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-/* Input group */
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
+/* Labels and inputs */
+.admin-register-form label {
+  margin-top: 1rem;
   display: block;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
   color: #334155;
+  font-weight: 500;
 }
 
-.form-group input {
+.admin-register-form input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
+  margin-top: 0.4rem;
   font-size: 1rem;
+  transition: border-color 0.3s ease;
   background-color: #fff;
-  transition: border 0.3s ease;
 }
 
-.form-group input:focus {
-  border-color: #4f46e5;
+.admin-register-form input:focus {
   outline: none;
+  border-color: #4f46e5;
 }
 
-/* Buttons */
-.admin-login-button {
+/* Button */
+.admin-register-form button {
+  margin-top: 1.75rem;
   width: 100%;
   padding: 0.75rem;
   background: linear-gradient(to right, #6366f1, #4f46e5);
@@ -83,54 +80,36 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-top: 0.5rem;
 }
 
-.admin-login-button:hover {
+.admin-register-form button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
 }
 
 /* Message */
-.login-message {
+.admin-register-message {
   margin-top: 1rem;
-  color: #dc2626;
-  font-size: 0.95rem;
   text-align: center;
+  color: #dc2626;
+  font-weight: 500;
 }
 
 /* Links */
-.admin-login-links {
+.admin-register-links {
   margin-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.link-button {
-  background-color: #4f46e5;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
   text-align: center;
 }
 
-.link-button.secondary {
-  background-color: #64748b;
+.admin-register-links a {
+  color: #4f46e5;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.link-button:hover {
-  background-color: #4338ca;
-}
-
-.link-button.secondary:hover {
-  background-color: #475569;
+.admin-register-links a:hover {
+  color: #4338ca;
 }
 
 /* Animations */
@@ -141,15 +120,11 @@
 
 /* Responsive */
 @media (max-width: 480px) {
-  .admin-login-form {
+  .admin-register-form {
     padding: 1.5rem;
   }
 
   .form-title {
     font-size: 1.5rem;
-  }
-
-  .link-button {
-    width: 100%;
   }
 }

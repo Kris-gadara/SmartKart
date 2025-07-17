@@ -13,6 +13,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AddProduct from './pages/AddProduct';
 import ManageProducts from './pages/ManageProducts';
 import EditProduct from './pages/EditProduct';
+import AdminRegister from './pages/AdminRegister';
 import { CartProvider } from './context/CartContext';
 import { CustomerProtectedRoute, AdminProtectedRoute } from './components/ProtectedRoute';
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="/customer/login" element={<CustomerLogin />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/register" element={<AdminRegister />} />
             
             <Route path="/dashboard" element={
               <CustomerProtectedRoute>
